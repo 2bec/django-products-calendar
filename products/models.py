@@ -47,22 +47,19 @@ class Product(models.Model):
 
 class Price(models.Model):
 	product = models.ForeignKey(Product)
-	date = models.DateField()
-	hour_start = models.TimeField()
-	hour_end = models.TimeField()
+	date_start = models.DateTimeField()
+	date_end = models.DateTimeField()
 	price_from = models.DecimalField(max_digits=5, decimal_places=2)
 	price_to = models.DecimalField(max_digits=5, decimal_places=2)
 	is_public = models.BooleanField(default=True)
 	date_added = models.DateTimeField(auto_now_add=True)
 
 	class Meta:
-		unique_together = (("product", "date", "hour_start", "hour_end"))
-		ordering = ['-date']
+		unique_together = (("product", "date_start","date_end"))
+		ordering = ['date_start']
 		get_latest_by = 'id'
 		verbose_name = _("price")
 		verbose_name_plural = _("prices")
 
 	def __str__(self):
-		return "%s, de %.2f por %.2f em %s as %s ate %s" % (self.product, self.price_from,
-															self.price_to, self.date,
-															self.hour_start, self.hour_end)
+		return "%s %s" % (self.date_start, self.date_end)
