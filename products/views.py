@@ -9,7 +9,7 @@ from products.mixins import JSONResponseMixin
 
 class PricesDayArchiveView(DayArchiveView, JSONResponseMixin):
 	""" Lista de precos em um determinado dia """
-    #queryset = Price.objects.all()
+	#queryset = Price.objects.all()
 	template_name = "products/price_archive_day.html"
 	date_field = "date_start"
 	month_format = "%m"
@@ -94,27 +94,30 @@ class PricesListJSONView(JSONResponseMixin, ListView):
 	model = Price
 
 	def get_queryset(self):
-		""" Filtra resultados  """
+		""" Filtra resultados usando kwargs """
 		year = self.kwargs.get('year', False)
 		month = self.kwargs.get('month', False)
 		day = self.kwargs.get('day', False)
 		week_day = self.kwargs.get('week', False)
 
 		if year and month and day:
-			return Price.objects.filter(is_public=True,
-										date_start__year=year,
-										date_start__month=month,
-										date_start__day=day)
+			return Price.objects.filter(
+				is_public=True,
+				date_start__year=year,
+				date_start__month=month,
+				date_start__day=day)
 
 		if year and month:
-			return Price.objects.filter(is_public=True,
-										date_start__year=year,
-										date_start__month=month)
+			return Price.objects.filter(
+				is_public=True,
+				date_start__year=year,
+				date_start__month=month)
 
 		if year and week_day:
-			return Price.objects.filter(is_public=True,
-										date_start__year=year,
-										date_start__week_day=week_day)
+			return Price.objects.filter(
+				is_public=True,
+				date_start__year=year,
+				date_start__week_day=week_day)
 
 	def render_to_response(self, context, **response_kwargs):
 		return self.render_to_json_response(self.object_list, **response_kwargs)
