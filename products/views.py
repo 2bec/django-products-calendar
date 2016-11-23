@@ -95,36 +95,24 @@ class PricesListJSONView(JSONResponseMixin, ListView):
 
 	model = Price
 
-	def get_date_from_week(self, year, week):
-		new_date = datetime.date(year,1,1)
-		new_date = new_date - datetime.timedelta(new_date.weekday())
-		week_date = datetime.timedelta(days = (week)*7)
-		return new_date + week_date,  new_date + week_date + datetime.timedelta(days=6)
+	#def get_date_from_week(self, year, week):
+	#	new_date = datetime.date(year,1,1)
+	#	new_date = new_date - datetime.timedelta(new_date.weekday())
+	#	week_date = datetime.timedelta(days = (week)*7)
+	#	return new_date + week_date #for range,  new_date + week_date + datetime.timedelta(days=6)
 
 	def get_queryset(self):
 		""" Filtra resultados usando kwargs """
-		year = self.kwargs.get('year', "2016")
-		month = self.kwargs.get('month', 0)
-		day = self.kwargs.get('day', 0)
-		week = self.kwargs.get('week', "1")
+		date_start = datetime.datetime.strptime(self.kwargs.get('date_start', 0), '%Y-%m-%d')
+		date_end = datetime.datetime.strptime(self.kwargs.get('date_end', 0), '%Y-%m-%d')
 
-		if year and month and day:
-			return Price.objects.filter(
+		return Price.objects.filter(
 				is_public=True,
-				date_start__year=year,
-				date_start__month=month,
-				date_start__day=day)
-
-		if year and month:
-			return Price.objects.filter(
-				is_public=True,
-				date_start__year=year,
-				date_start__month=month)
-
-		if year and week:
-			return Price.objects.filter(
-				is_public=True,
-				date_start__range=self.get_date_from_week(int(year), int(week)))
+				date_start__range=(
+					datetime.datetime.combine(date_start, datetime.time.min),
+					datetime.datetime.combine(date_end, datetime.time.max)
+				)
+		)
 
 	def render_to_response(self, context, **response_kwargs):
 		return self.render_to_json_response(self.object_list, **response_kwargs)
