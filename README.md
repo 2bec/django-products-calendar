@@ -5,7 +5,15 @@ Retorna lista de preços por data e horário. Feito com Django e FullCalendar.
 First set a virtualenv ``` virtualenv env ``` and active than ``` source env/bin/active ```.
 
 ## Requirements
-``` pip install -r requirements.txt ```
+```
+pip install -r requirements.txt
+```
+
+## Migrate
+Go to application root path and execute.
+```
+python manage.py migrate
+```
 
 ## Usage
 Shell ``` python mange.py shell ```.
@@ -27,7 +35,7 @@ Get all prices with date_start and date_end. Can be one day or a real range.
 >>> prices = Price.objects.filter(date_start__range=(date_start, date_end))
 ```
 
-Server, migrate ``` python manage.py migrate ``` and runserver ``` python manage.py runserver 9090 ```. Access:
+Server ``` python manage.py runserver 9090 ```. Access:
 * http://127.0.0.1:9090/products/calendario/2016/11/21/ - to see a price list for this product on the day (yyyy/mm/dd) - use: ?format=json [get] para receber a lista em json
 * http://127.0.0.1:9090/products/calendario/2016/month/11/ - to see a price list for this product on the month (yyyy/month/mm) - use: ?format=json [get] para receber a lista em json
 * http://127.0.0.1:9090/products/calendario/2016/week/47/ - to see a price list for this product on the week (yyyy/week/W) - use: ?format=json [get] para receber a lista em json
