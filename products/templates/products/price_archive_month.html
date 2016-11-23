@@ -8,6 +8,41 @@
 	{% for p in object_list %}
 		<p>{{ p }} - {{ p.product }}</p>
 	{% endfor %}
+
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel"></h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-3" id="myProduct">
+
+						</div>
+						<div class="col-md-5" id="dateRange">
+
+						</div>
+						<div class="col-md-2" id="myPrice">
+
+						</div>
+						<div class="col-md-2" id="myQuantity">
+							<input type="number" class="form-control" id="myQuantityForm" value="1" />
+						</div>
+						<div class="col-md-12" id="total">
+
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+					<button type="button" class="btn btn-primary">Confirmar Reserva</button>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
 
 {% block extra_head %}
@@ -16,22 +51,33 @@
 	$(document).ready(function() {
 		$('#calendar').fullCalendar({
 			timeFormat: "H:mm",
-	        header: {
-	            left: 'prev,next today',
-	            center: 'title',
-	            right: 'month,agendaWeek,agendaDay',
-	        },
-	        defaultDate: '{{ month|date:"c" }}',
-	        defaultView: 'month',
-	        events: [
-	        	{% for e in object_list %}
-	        		{
-	        			title:'{{ e.product }}',
-	        			start: '{{ e.date_start|date:"c" }}',
-	        			end: '{{ e.date_end|date:"c" }}'
-	        		},
-	        	{% endfor %}
-	        ],  
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay',
+			},
+			defaultDate: '{{ month|date:"c" }}',
+			defaultView: 'month',
+			events: [
+				{% for e in object_list %}
+					{
+						title:'{{ e.product }}',
+						start: '{{ e.date_start|date:"c" }}',
+						end: '{{ e.date_end|date:"c" }}',
+						price: '{{ e.price_to }}',
+					},
+				{% endfor %}
+			],
+			eventClick: function(calEvent, jsEvent, view) {
+				var date_start = new moment(calEvent.start);
+				var date_end = new moment(calEvent.end);
+
+				$('#myModalLabel').html(calEvent.title);
+				$('#myProduct').html(calEvent.title);
+				$('#dateRange').html('<label>Ínicio:</label>'+date_start.format()+' \n<label>Término:</label>'+ date_end.format());
+				$('#myPrice').html('R$ '+calEvent.price);
+				$('#myModal').modal('toggle');
+			}
 		});
 		$('.fc-prev-button span').click(function(){
 			alert('prev ');
