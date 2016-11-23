@@ -21,8 +21,5 @@ urlpatterns = [
     url(r'^calendario/(?P<year>[0-9]{4})/(?P<month>[0-9]+)/(?P<day>[0-9]+)/$', PricesDayArchiveView.as_view(), name='calendario_day'),
     url(r'^calendario/(?P<year>[0-9]{4})/week/(?P<week>[0-9]+)/$', PricesWeekArchiveView.as_view(), name="calendario_week"),
     url(r'^calendario/(?P<year>[0-9]{4})/month/(?P<month>[0-9]+)/$', PricesMonthArchiveView.as_view(), name="calendario_month"),
-    url(r'^json/(?P<year>[0-9]{4})/(?P<month>[0-9]+)/(?P<day>[0-9]+)/$', PricesListJSONView.as_view(), name="calendario_json_day"),
-    url(r'^json/(?P<year>[0-9]{4})/week/(?P<week>[0-9]+)/$', PricesListJSONView.as_view(), name="calendario_json_week"),
-    url(r'^json/(?P<year>[0-9]{4})/month/(?P<month>[0-9]+)/$', PricesListJSONView.as_view(), name="calendario_json_month"),
-    
+    url(r'^json/(?P<date_start>\d{4}-\d{2}-\d{2})/(?P<date_end>\d{4}-\d{2}-\d{2})$', PricesListJSONView.as_view(), name="calendario_json_day"),
 ]
