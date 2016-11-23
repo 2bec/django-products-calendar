@@ -23,4 +23,4 @@ class JSONResponseMixin(object):
 		# to do much more complex handling to ensure that arbitrary
 		# objects -- such as Django model instances or querysets
 		# -- can be serialized as JSON.
-		return serializers.serialize('json', context, fields=('product', 'date_start', 'date_end', 'price_from', 'price_to'))
+		return serializers.serialize('json', context, fields=('pk', 'product', 'date_start', 'date_end', 'price_from', 'price_to'))
